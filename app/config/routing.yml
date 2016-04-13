@@ -1,0 +1,11 @@
+user:
+    resource: "@UserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@TournamentBundle/Controller/"
+    type:     annotation
+
+user_bundle:
+   resource: "@UserBundle/Resources/config/routing.yml"
