@@ -25,8 +25,8 @@ class LoadTournament implements FixtureInterface, OrderedFixtureInterface
     {
         $users = $manager->getRepository("UserBundle:User")->findAll();
         $tournamentsData = array(
-            array("name" => "Tournoi 1", "datetime" => new \DateTime("-1 year"), "max_players" => 10, "organizer" => $users[0]),
-            array("name" => "Tournoi 2", "datetime" => new \DateTime("-1 month"), "max_players" => 50, "organizer" => $users[1]),
+            array("name" => "Tournoi 1", "datetime" => new \DateTime("+1 year"), "max_players" => 10, "organizer" => $users[0]),
+            array("name" => "Tournoi 2", "datetime" => new \DateTime("+1 month"), "max_players" => 50, "organizer" => $users[1]),
             array("name" => "Tournoi 3", "datetime" => new \DateTime("-1 day"), "max_players" => 100, "organizer" => $users[2]),
         );
         foreach ($tournamentsData as $tournamentData) {

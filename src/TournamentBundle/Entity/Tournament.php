@@ -63,20 +63,26 @@ class Tournament
     }
 
 
-   public function isRegistered(User $user) {
+   public function isRegistered($user) {
        /**
         * @var $inscription TournamentInscription
         */
+       if(!$user) {
+           return false;
+       }
        foreach ($this->inscriptions as $inscription)
            if($inscription->getValide() && $user == $inscription->getUser())
                return true;
        return false;
    }
 
-    public function isRegistering(User $user) {
+    public function isRegistering($user) {
         /**
          * @var $inscription TournamentInscription
          */
+        if(!$user) {
+            return false;
+        }
         foreach ($this->inscriptions as $inscription) {
             if($user == $inscription->getUser())
                 return true;
