@@ -7,3 +7,6 @@ services:
 #    service_name:
 #        class: TournamentBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    redirect.after.logout:
+        class: UserBundle\Redirection\AfterLogoutRedirection
+        arguments: ["@router"]

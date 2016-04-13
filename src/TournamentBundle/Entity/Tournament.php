@@ -4,7 +4,7 @@ namespace TournamentBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToMany;
+use UserBundle\Entity\User;
 
 /**
  * Tournament
@@ -15,9 +15,17 @@ use Doctrine\ORM\Mapping\ManyToMany;
 class Tournament
 {
     /**
-     * @ManyToMany(targetEntity="UserBundle\Entity\User", mappedBy="tournaments")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
-    private $users;
+    private $organizer;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="TournamentBundle\Entity\TournamentInscription", mappedBy="tournament", cascade={"remove"})
+     */
+    private $inscriptions;
 
     /**
      * @var int
@@ -51,9 +59,38 @@ class Tournament
 
 
     public function __construct() {
-        $this->users = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
+
+   public function isRegistered(User $user) {
+       /**
+        * @var $inscription TournamentInscription
+        */
+       foreach ($this->inscriptions as $inscription)
+           if($inscription->getValide() && $user == $inscription->getUser())
+               return true;
+       return false;
+   }
+
+    public function isRegistering(User $user) {
+        /**
+         * @var $inscription TournamentInscription
+         */
+        foreach ($this->inscriptions as $inscription) {
+            if($user == $inscription->getUser())
+                return true;
+        }
+        return false;
+    }
+
+    public function getNumberOfValideUsers() {
+        $nb = 0;
+        foreach ($this->inscriptions as $inscription)
+            if($inscription->getValide())
+                ++$nb;
+        return $nb;
+    }
 
     /**
      * Get id
@@ -138,36 +175,74 @@ class Tournament
     }
 
     /**
-     * Add user
+     * Set organizer
      *
-     * @param \UserBundle\Entity\User $user
+     * @param \UserBundle\Entity\User $organizer
      *
      * @return Tournament
      */
-    public function addUser(\UserBundle\Entity\User $user)
+    public function setOrganizer(\UserBundle\Entity\User $organizer = null)
     {
-        $this->users[] = $user;
+        $this->organizer = $organizer;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Get organizer
      *
-     * @param \UserBundle\Entity\User $user
+     * @return \UserBundle\Entity\User
      */
-    public function removeUser(\UserBundle\Entity\User $user)
+    public function getOrganizer()
     {
-        $this->users->removeElement($user);
+        return $this->organizer;
     }
 
     /**
-     * Get users
+     * Set inscriptions
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @param \TournamentBundle\Entity\TournamentInscription $inscriptions
+     *
+     * @return Tournament
      */
-    public function getUsers()
+    public function setInscriptions(\TournamentBundle\Entity\TournamentInscription $inscriptions = null)
     {
-        return $this->users;
+        $this->inscriptions = $inscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Get inscriptions
+     *
+     * @return \TournamentBundle\Entity\TournamentInscription
+     */
+    public function getInscriptions()
+    {
+        return $this->inscriptions;
+    }
+
+    /**
+     * Add inscription
+     *
+     * @param \TournamentBundle\Entity\TournamentInscription $inscription
+     *
+     * @return Tournament
+     */
+    public function addInscription(\TournamentBundle\Entity\TournamentInscription $inscription)
+    {
+        $this->inscriptions[] = $inscription;
+
+        return $this;
+    }
+
+    /**
+     * Remove inscription
+     *
+     * @param \TournamentBundle\Entity\TournamentInscription $inscription
+     */
+    public function removeInscription(\TournamentBundle\Entity\TournamentInscription $inscription)
+    {
+        $this->inscriptions->removeElement($inscription);
     }
 }

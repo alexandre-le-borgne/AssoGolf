@@ -1,6 +1,9 @@
 <?php
 
 namespace UserBundle\Repository;
+use TournamentBundle\Entity\Tournament;
+use TournamentBundle\Entity\TournamentInscription;
+use UserBundle\Entity\User;
 
 /**
  * UserRepository
@@ -10,4 +13,18 @@ namespace UserBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findTournamentsRegisteringByUser(User $user)
+    {
+        $tournaments = array();
+        /**
+         * @var $inscription TournamentInscription
+         * @var $tournament Tournament
+         */
+        foreach ($user->getInscriptions() as $inscription) {
+            $tournament = $inscription->getTournament();
+            if (!$inscription->getValide() && $tournament->getDatetime() > new \Datetime())
+                $tournaments[] = $tournament;
+        }
+        return $tournaments;
+    }
 }

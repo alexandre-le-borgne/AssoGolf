@@ -2,9 +2,9 @@
  * Created by GCC-MED on 12/04/2016.
  */
 $(function() {
-    $(document).on('mousedown', 'tr[url]', function(e){
+    $(document).on('mousedown', 'tr[data-url]', function(e){
         var click = e.which;
-        var url = $(this).attr('url');
+        var url = $(this).attr('data-url');
         if(url){
             if(click == 1){
                 window.location.href = url;

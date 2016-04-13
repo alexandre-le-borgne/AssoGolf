@@ -22,10 +22,11 @@ class DefaultController extends Controller
      */
     public function IndexAction($id) {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository("UserBundle:User")->find($id);
+        $userRepository = $em->getRepository("UserBundle:User");
+        $user = $userRepository->find($id);
         if($user == null)
             throw $this->createNotFoundException("Utilisateur inconnu");
-        return $this->render("@User/user.html.twig", array("user" => $user));
+        return $this->render("@User/Default/user.html.twig", array("user" => $user, "userRepository" => $userRepository));
     }
 
     /**
@@ -38,6 +39,15 @@ class DefaultController extends Controller
         $user = $em->getRepository("UserBundle:User")->find($id);
         if($user == null)
             throw $this->createNotFoundException("Utilisateur inconnu");
-        return $this->render("@User/user_info.html.twig", array("user" => $user));
+        return $this->render("@User/Default/user_info.html.twig", array("user" => $user));
+    }
+
+    /**
+     * @Route ("/users", name="users")
+     */
+    public function UsersAction() {
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository("UserBundle:User")->findAll();
+        return $this->render("@User/Default/users.html.twig", array("users" => $users));
     }
 }

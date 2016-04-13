@@ -6,3 +6,11 @@
     font-weight: bold;
     color: darkred;
 }
+
+.navbar-collapse {
+    text-align: center;
+}
+
+.inline {
+    display: inline;
+}

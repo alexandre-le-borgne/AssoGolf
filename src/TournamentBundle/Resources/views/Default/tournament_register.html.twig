@@ -1,0 +1,32 @@
+{% if 'now'|date('U') <= tournament.datetime|date('U') %}
+    {% if tournament.registering(app.user) %}
+        <form method="post" action="{{ path("tournamentUnscription", {"id":tournament.id}) }}">
+            <button type="submit" class="btn btn-danger">Se désinscrire</button>
+        </form>
+        {% if not tournament.registered(app.user) %}
+            Votre demande d'inscription est en attente de validation par l'organisateur
+        {% endif %}
+    {% else %}
+        {% if tournament.maxPlayers > tournament.numberOfValideUsers %}
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <form method="post" action="{{ path("tournamentInscription", {"id":tournament.id}) }}">
+                    {% if tournament.maxPlayers > tournament.numberOfValideUsers %}
+                        <button type="submit" class="btn btn-success">S'inscrire</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-success disabled">S'inscrire</button>
+                        <br>Nombre maximum de participants atteint !
+                    {% endif %}
+                </form>
+            {% else %}
+                <button type="button" class="btn btn-primary btn-xs login">
+                    Connectez-vous pour vous inscrire à ce tournoi
+                </button>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% if tournament.registered(app.user) %}
+        Vous avez participé à ce tournoi
+    {% endif %}
+{% endif %}
+

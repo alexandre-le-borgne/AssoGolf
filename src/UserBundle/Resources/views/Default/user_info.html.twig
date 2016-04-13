@@ -1,0 +1,17 @@
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    <ul>
+        <li>Prénom: {{ user.firstname }}</li>
+        <li>Nom: {{ user.lastname }}</li>
+        {% if is_granted('ROLE_ORGANIZER') %}
+            <li>Email: {{ user.email }}</li>
+        {% endif %}
+        <li>Inscrit le: {{ user.registerDate|date('d F Y') }}</li>
+    </ul>
+    <br>
+{% else %}
+    <button type="button" class="btn btn-primary btn-xs login">
+        Connectez-vous pour voir les informations de cette personne
+    </button>
+    <br>
+    <br>
+{% endif %}

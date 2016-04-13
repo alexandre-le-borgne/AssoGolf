@@ -1,0 +1,78 @@
+<div class="navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li {% if 'homepage' in app.request.attributes.get('_route') %} class="active"{% endif %}>
+            <a href="{{ path("homepage") }}">Accueil</a>
+        </li>
+        <li><a href="{{ path("users") }}">Membres</a></li>
+        <li class="dropdown{% if 'tournament' in app.request.attributes.get('_route') %} active{% endif %}">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tournois <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li class="dropdown-header">En cours</li>
+                {% for tournament in tournaments %}
+                    {% if 'now'|date('U') <= tournament.datetime|date('U') %}
+                        <li><a href="{{ path("tournament", {"id":tournament.id}) }}">{{ tournament.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Terminés</li>
+                {% for tournament in tournaments %}
+                    {% if 'now'|date('U') > tournament.datetime|date('U') %}
+                        <li><a href="{{ path("tournament", {"id":tournament.id}) }}">{{ tournament.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
+        {% if is_granted("ROLE_ORGANIZER") %}
+            <li class="dropdown{% if 'tournament' in app.request.attributes.get('_route') %} active{% endif %}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gestion <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path("listTournaments") }}">Administrer les tournois que j'organise</a></li>
+                    <li><a href="{{ path("newTournament") }}">Créer un nouveau tournoi</a></li>
+                    <li><a href="{{ path("usersTournaments") }}">Voir les demandes d'inscription</a></li>
+                </ul>
+            </li>
+        {% endif %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right" id="login-container">
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <li class="nav-item navbar-text">
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            </li>
+        {% else %}
+            <li class="nav-item navbar-text hidden">
+
+            </li>
+            <li class="nav-item hidden">
+                <a class="nav-link" href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            </li>
+            <li><p class="navbar-text">Vous avez déjà un compte ?</p></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Connectez ou enregistrez vous</b>
+                    <span class="caret"></span></a>
+                <ul id="login-dp" class="dropdown-menu">
+                    <li>
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ render(controller('FOSUserBundle:Security:login')) }}
+                            </div>
+                            <br>
+                            <div class="bottom text-center">
+                                Nouveau ici ?
+                                <a href="{{ path('fos_user_registration_register') }}">
+                                    <b>Rejoignez nous</b>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        {% endif %}
+    </ul>
+</div><!-- /.navbar-collapse -->

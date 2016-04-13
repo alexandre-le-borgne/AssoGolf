@@ -1,4 +1,0 @@
-services:
-    redirect.after.logout:
-        class: UserBundle\Redirection\AfterLogoutRedirection
-        arguments: [router, security.context]

@@ -1,0 +1,27 @@
+{% extends "::base.html.twig" %}
+{% block title %}{{ parent() }} - {{ user.username }}{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="text-center">
+            <h2>
+                {{ user.username }}
+            </h2>
+        </div>
+        <br>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {% if user.granted("ROLE_ORGANIZER") %}
+                    <span class="label label-info">Organisateur</span>
+                {% endif %}
+                Informations personelles
+            </div>
+            <div class="panel-body">
+                <br>
+                <div class="after-login" data-include="{{ path("userInfo", {"id": user.id}) }}">
+                {% include "@User/Default/user_info.html.twig" with {"user": user} only %}
+                </div>
+            </div>
+        </div>
+        {% include "@User/Default/user_tournaments.html.twig" %}
+    </div>
+{% endblock %}

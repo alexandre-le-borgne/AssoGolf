@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-{% set percent = tournament.users|length * 100 / tournament.maxPlayers %}
+{% set percent = tournament.numberOfValideUsers * 100 / tournament.maxPlayers %}
 {% block title %}{{ parent() }} - {{ tournament.name }}{% endblock %}
 {% block body %}
     <div class="container">
@@ -8,19 +8,28 @@
                 {{ tournament.datetime|date('d F Y') }}
             </h2>
             <div class="after-login" data-include="{{ path("tournamentForm", {"id": tournament.id}) }}">
-                {% include "@Tournament/Default/tournament_form.html.twig" with {"tournament": tournament} only %}
+                {% include "@Tournament/Default/tournament_register.html.twig" with {"tournament": tournament} only %}
             </div>
         </div>
         <br>
         <div class="panel panel-default">
-            <div class="panel-heading">Tournoi {{ tournament.name }}</div>
+            <div class="panel-heading">
+                Tournoi {{ tournament.name }}
+            </div>
             <div class="panel-body">
+                <h3 class="text-center">
+                    Organisé par :
+                    <a href="{{ path("user", {"id": tournament.organizer.id}) }}">
+                        {{ tournament.organizer.username }}
+                    </a>
+                </h3>
                 <br>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ tournament.users|length }}"
+                    <div class="progress-bar" role="progressbar"
+                         aria-valuenow="{{ tournament.numberOfValideUsers }}"
                          aria-valuemin="0" aria-valuemax="{{ tournament.maxPlayers }}"
                          style="min-width: 2em; width: {{ percent }}%">
-                        {{ tournament.users|length }}/{{ tournament.maxPlayers }} participants
+                        {{ tournament.numberOfValideUsers }}/{{ tournament.maxPlayers }} participants
                     </div>
                 </div>
             </div>
@@ -31,18 +40,20 @@
                     <th>Date d'inscription</th>
                 </tr>
                 </thead>
-                {% for user in tournament.users %}
-                    <tr url="{{ path("user", {"id":user.id}) }}" style="cursor: pointer">
-                        <td>
-                            {% if user.granted("ROLE_ORGANISER") %}
-                                <span class="label label-info">Organisateur</span>
-                            {% endif %}
-                            {{ user.username }}
-                        </td>
-                        <td>
-                            {{ user.registerDate|date('d F Y') }}
-                        </td>
-                    </tr>
+                {% for inscription in tournament.inscriptions %}
+                    {% if inscription.valide %}
+                        <tr data-url="{{ path("user", {"id":inscription.user.id}) }}" style="cursor: pointer">
+                            <td>
+                                {% if inscription.user.granted("ROLE_ORGANIZER") %}
+                                    <span class="label label-info">Organisateur</span>
+                                {% endif %}
+                                {{ inscription.user.username }}
+                            </td>
+                            <td>
+                                {{ inscription.user.registerDate|date('d F Y') }}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
         </div>

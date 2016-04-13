@@ -11,8 +11,8 @@
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-        {% include '::nav.html.twig' %}
+    <div class="container-fluid after-login" data-include="{{ path("nav") }}">
+        {{ render(controller("TournamentBundle:Default:nav")) }}
     </div>
 </nav>
 {% block body %}

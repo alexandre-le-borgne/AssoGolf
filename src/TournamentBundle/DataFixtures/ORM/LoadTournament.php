@@ -23,16 +23,18 @@ class LoadTournament implements FixtureInterface, OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        $users = $manager->getRepository("UserBundle:User")->findAll();
         $tournamentsData = array(
-            array("name" => "Tournoi 1", "datetime" => new \DateTime("-1 year"), "max_players" => 10),
-            array("name" => "Tournoi 2", "datetime" => new \DateTime("-1 month"), "max_players" => 50),
-            array("name" => "Tournoi 3", "datetime" => new \DateTime("-1 day"), "max_players" => 100),
+            array("name" => "Tournoi 1", "datetime" => new \DateTime("-1 year"), "max_players" => 10, "organizer" => $users[0]),
+            array("name" => "Tournoi 2", "datetime" => new \DateTime("-1 month"), "max_players" => 50, "organizer" => $users[1]),
+            array("name" => "Tournoi 3", "datetime" => new \DateTime("-1 day"), "max_players" => 100, "organizer" => $users[2]),
         );
         foreach ($tournamentsData as $tournamentData) {
             $tournament = new Tournament();
             $tournament->setName($tournamentData["name"]);
             $tournament->setDatetime($tournamentData["datetime"]);
             $tournament->setMaxPlayers($tournamentData["max_players"]);
+            $tournament->setOrganizer($tournamentData["organizer"]);
             $manager->persist($tournament);
         }
         $manager->flush();
@@ -45,6 +47,6 @@ class LoadTournament implements FixtureInterface, OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 1;
+        return 2;
     }
 }

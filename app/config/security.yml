@@ -6,7 +6,7 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_ORGANISER:     ROLE_USER
+        ROLE_ORGANIZER:     ROLE_USER
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
@@ -16,9 +16,10 @@ security:
     firewalls:
           main:
               pattern: ^/
+              provider: in_memory
               ajax_form_login:
                   check_path: /login_check
-                  login_path: /login
+                  login_path: /
                   provider: fos_userbundle
                   always_use_default_target_path: true
               logout:
@@ -33,4 +34,4 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/admin/, role: ROLE_ORGANIZER }

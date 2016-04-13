@@ -1,0 +1,33 @@
+{% extends "::base.html.twig" %}
+{% block title %}{{ parent() }} - Membres{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="text-center">
+            <h2>
+                Liste des membres
+            </h2>
+        </div>
+        <br>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Pseudonyme</th>
+                <th>Date d'inscription</th>
+            </tr>
+            </thead>
+            {% for user in users %}
+                <tr data-url="{{ path("user", {"id":user.id}) }}" style="cursor: pointer">
+                    <td>
+                        {% if user.granted("ROLE_ORGANIZER") %}
+                            <span class="label label-info">Organisateur</span>
+                        {% endif %}
+                        {{ user.username }}
+                    </td>
+                    <td>
+                        {{ user.registerDate|date('d F Y') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -38,7 +38,7 @@ class LoadUser implements FixtureInterface, ContainerAwareInterface, OrderedFixt
 
         $usersData = array(
             array("email" => "root@root.fr", "username" => "root", "password" => "root", "lastname" => "root",
-                "firstname" => "root", "register_date" => new \DateTime("-1 year"), "role" => User::ORGANISER),
+                "firstname" => "root", "register_date" => new \DateTime("-1 year"), "role" => User::ORGANIZER),
             array("email" => "toto@toto.fr", "username" => "toto", "password" => "", "lastname" => "toto",
                 "firstname" => "toto", "register_date" => new \DateTime("-1 month"), "role" => User::USER),
             array("email" => "titi@titi.fr", "username" => "titi", "password" => "", "lastname" => "titi",
@@ -71,6 +71,6 @@ class LoadUser implements FixtureInterface, ContainerAwareInterface, OrderedFixt
      */
     public function getOrder()
     {
-        return 2;
+        return 1;
     }
 }

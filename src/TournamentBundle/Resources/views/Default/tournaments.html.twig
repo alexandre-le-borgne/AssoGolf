@@ -1,0 +1,52 @@
+{% extends "::base.html.twig" %}
+{% block title %}{{ parent() }} - Nouveau tournoi{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="text-center">
+            <h2>
+                Administration des tournois
+                <small><a href="{{ path("newTournament") }}">Créer un nouveau tournoi</a></small>
+            </h2>
+        </div>
+        <br>
+        <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Date</th>
+                    <th>Participants</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                {% for tournament in tournaments %}
+                        <tr>
+                            <td>
+                                {{ tournament.name }}
+                            </td>
+                            <td>
+                                {{ tournament.datetime|date('d F Y') }}
+                            </td>
+                            <td>
+                                {{ tournament.numberOfValideUsers }}/{{ tournament.maxPlayers }}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                <form class="inline" method="post"
+                                      action="{{ path("tournamentEdit", {"id":tournament.id}) }}">
+
+                                        <button type="submit" name="accept" class="btn btn-primary">Editer</button>
+
+                                </form>
+                                    <form class="inline" method="post"
+                                          action="{{ path("tournamentDelete", {"id":tournament.id}) }}">
+
+                                        <button type="submit" name="decline" class="btn btn-danger">Supprimer</button>
+
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                {% endfor %}
+            </table>
+    </div>
+{% endblock %}

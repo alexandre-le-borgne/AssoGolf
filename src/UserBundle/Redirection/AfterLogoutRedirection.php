@@ -13,19 +13,12 @@ class AfterLogoutRedirection implements LogoutSuccessHandlerInterface
      * @var \Symfony\Component\Routing\RouterInterface
      */
     private $router;
+    
 
-    /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
-     */
-    private $security;
 
-    /**
-     * @param SecurityContextInterface $security
-     */
-    public function __construct(RouterInterface $router, SecurityContextInterface $security)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->security = $security;
     }
 
     /**
@@ -34,6 +27,10 @@ class AfterLogoutRedirection implements LogoutSuccessHandlerInterface
      */
     public function onLogoutSuccess(Request $request)
     {
-        return new RedirectResponse($this->router->generate($request->get('_route')));
+        $referer = $request->headers->get('referer');
+        if($referer != null)
+            return new RedirectResponse($referer);
+        else
+            return new RedirectResponse($this->router->generate("homepage"));
     }
 }

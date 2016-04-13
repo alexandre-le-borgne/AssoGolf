@@ -1,0 +1,23 @@
+<div class="list-group">
+    <h3>Les tournois auxquels {{ user.username }} est inscrit (Class User)</h3>
+    {% for tournament in user.valideTournaments %}
+        <a href="{{ path("tournament", {"id":tournament.id}) }}" class="list-group-item active">
+            {{ tournament.name }}
+            <span class="badge">{{ tournament.numberOfValideUsers }} participants</span>
+        </a><br>
+    {% endfor %}
+    <h3>Les tournois auxquels {{ user.username }} attend la confirmation de son inscription (Repository)</h3>
+    {% for tournament in userRepository.findTournamentsRegisteringByUser(user) %}
+        <a href="{{ path("tournament", {"id":tournament.id}) }}" class="list-group-item active">
+            {{ tournament.name }}
+            <span class="badge">{{ tournament.numberOfValideUsers }} participants</span>
+        </a><br>
+    {% endfor %}
+    <h3>Les tournois auxquels {{ user.username }} a participé (Extension Twig)</h3>
+    {% for tournament in getFinishedTournamentsByUser(user) %}
+        <a href="{{ path("tournament", {"id":tournament.id}) }}" class="list-group-item active">
+            {{ tournament.name }}
+            <span class="badge">{{ tournament.numberOfValideUsers }} participants</span>
+        </a><br>
+    {% endfor %}
+</div>

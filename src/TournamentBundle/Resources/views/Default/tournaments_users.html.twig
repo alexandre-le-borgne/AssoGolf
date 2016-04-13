@@ -1,0 +1,48 @@
+{% extends "::base.html.twig" %}
+{% block title %}{{ parent() }} - Nouveau tournoi{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="text-center">
+            <h2>
+                Demandes d'inscription
+            </h2>
+        </div>
+        <br>
+        {% for tournament in tournaments %}
+            <h3>{{ tournament.name }}</h3>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Pseudonyme</th>
+                    <th>Date d'inscription</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                {% for inscription in tournament.inscriptions %}
+                    {% if not inscription.valide %}
+                        <tr>
+                            <td>
+                                {% if inscription.user.granted("ROLE_ORGANIZER") %}
+                                    <span class="label label-info">Organisateur</span>
+                                {% endif %}
+                                <a href="{{ path("user", {"id":inscription.user.id}) }}">{{ inscription.user.username }}</a>
+                            </td>
+                            <td>
+                                {{ inscription.user.registerDate|date('d F Y') }}
+                            </td>
+                            <td>
+                                <form method="post"
+                                      action="{{ path("tournamentInscriptionResponse", {"tournament_id":tournament.id,"user_id":inscription.user.id}) }}">
+                                    <div class="btn-group" role="group">
+                                        <button type="submit" name="accept" class="btn btn-success">Accepter</button>
+                                        <button type="submit" name="decline" class="btn btn-danger">Refuser</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endfor %}
+    </div>
+{% endblock %}
