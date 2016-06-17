@@ -1,3 +1,13 @@
+body {
+    /*background-image: url("../img/golf.jpg");*/
+    background-size: cover;
+    /*color: white!important;*/
+}
+
+.panel {
+    color: #333!important;
+}
+
 #login-dp {
     padding: 20px;
 }

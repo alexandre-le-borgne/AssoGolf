@@ -9,15 +9,12 @@ $(function () {
 
     $('#_submit').click(function (e) {
         e.preventDefault();
-        console.log($('form').serialize());
-        console.log($('form').attr('method'));
         $.ajax({
             type: $('form').attr('method'),
             url: PATH_FOS_USER_SECURITY_CHECK,
             data: $('form').serialize(),
             dataType: "json",
             success: function (data, status, object) {
-                console.log(data);
                 if (data.error) {
                     $('.error').html(data.error);
                 }
